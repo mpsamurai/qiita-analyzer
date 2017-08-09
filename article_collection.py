@@ -3,16 +3,19 @@
 # 参照：http://qiita.com/tag1216/items/7e23630d97293e35ea4c
 
 
-#### 特定のuserを取得する(自分のidを取得) ####
 from qiita_v2.client import QiitaClient
 # qiitaの個人用アクセストークン
 TOKEN = "4eb33e0057f314d4e8cdcc973a906325a24438fa"
 
-client = QiitaClient(access_token=TOKEN)
-# user情報
-res_user = client.get_user('hiropon4000')
-print(res_user.to_json())
+def get_particular_article(id):
+    client = QiitaClient(access_token=TOKEN)
+    # 特定のユーザーの投稿記事一覧を取得
+    res_user = client.list_user_items(id)
+    article_list = res_user.to_json()
+    for article in article_list:
+        for tags in article['tags']:
+            if tags['name'] == 'QiitaAPI':
+                print(article['title'])
 
-#### 特定の記事へのコメントを返す ###
-res_comment = client.list_item_comments('60189aee780feed921a5')
-print(res_comment.to_json())
+
+get_particular_article('hiropon4000')
