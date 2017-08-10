@@ -1,7 +1,7 @@
 # 参照：http://qiita.com/petitviolet/items/deda7b66852635264508
 # 参照：http://qiita.com/Algebra_nobu/items/abe38a5f1fea4aaf1700
 # 参照：http://qiita.com/tag1216/items/7e23630d97293e35ea4c
-
+# 参照：http://qiita.com/kuro4/items/f0f7d58e2286b59fe318 (C#)
 
 from qiita_v2.client import QiitaClient
 # qiitaの個人用アクセストークン
@@ -32,6 +32,7 @@ class child_QiitaClient(QiitaClient):
                     print("最新更新日：%s" % article['updated_at'])
         except KeyError:
             pass
+
 
 if __name__ == '__main__':
     client = child_QiitaClient(access_token=TOKEN)
