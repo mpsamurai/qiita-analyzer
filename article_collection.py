@@ -7,15 +7,20 @@ from qiita_v2.client import QiitaClient
 # qiitaの個人用アクセストークン
 TOKEN = "4eb33e0057f314d4e8cdcc973a906325a24438fa"
 
-def get_particular_article(id):
-    client = QiitaClient(access_token=TOKEN)
-    # 特定のユーザーの投稿記事一覧を取得
-    res_user = client.list_user_items(id)
-    article_list = res_user.to_json()
-    for article in article_list:
-        for tags in article['tags']:
-            if tags['name'] == 'QiitaAPI':
-                print(article['title'])
+class child_QiitaClient(QiitaClient):
+    """
+    QiitaClientを継承
+    """
+    def get_particular_article(self, id):
+        # 特定のユーザーの投稿記事一覧を取得
+        res_user = self.list_user_items(id)
+        article_list = res_user.to_json()
+        for article in article_list:
+            for tags in article['tags']:
+                if tags['name'] == 'QiitaAPI':
+                    print(article['title'])
 
 
-get_particular_article('hiropon4000')
+if __name__ == '__main__':
+    client = child_QiitaClient(access_token=TOKEN)
+    client.get_particular_article('hiropon4000')
