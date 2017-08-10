@@ -2,7 +2,7 @@
 # 参照：http://qiita.com/Algebra_nobu/items/abe38a5f1fea4aaf1700
 # 参照：http://qiita.com/tag1216/items/7e23630d97293e35ea4c
 # 参照：http://qiita.com/kuro4/items/f0f7d58e2286b59fe318 (C#)
-
+import mistune   # MarkdownからHTML変換
 from qiita_v2.client import QiitaClient
 # qiitaの個人用アクセストークン
 TOKEN = "4eb33e0057f314d4e8cdcc973a906325a24438fa"
@@ -30,6 +30,10 @@ class child_QiitaClient(QiitaClient):
                 # 最新更新日
                 if article['updated_at']:
                     print("最新更新日：%s" % article['updated_at'])
+                # 本文
+                if article['body']:
+                    html_body = mistune.markdown(article['body'])
+                    print("本文：%s" % html_body)
         except KeyError:
             pass
 
