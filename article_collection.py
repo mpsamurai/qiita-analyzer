@@ -1,7 +1,7 @@
 # 参照：http://qiita.com/petitviolet/items/deda7b66852635264508
 # 参照：http://qiita.com/Algebra_nobu/items/abe38a5f1fea4aaf1700
 # 参照：http://qiita.com/tag1216/items/7e23630d97293e35ea4c
-
+# 参照：http://qiita.com/kuro4/items/f0f7d58e2286b59fe318 (C#)
 
 from qiita_v2.client import QiitaClient
 # qiitaの個人用アクセストークン
@@ -16,11 +16,26 @@ class child_QiitaClient(QiitaClient):
         res_user = self.list_user_items(id)
         article_list = res_user.to_json()
         for article in article_list:
-            for tags in article['tags']:
-                if tags['name'] == 'QiitaAPI':
-                    print(article['title'])
+            try:
+                # 特定のタグ(Python)で取得されるtitle
+                for tags in article['tags']:
+                    if tags['name'] == 'Python':
+                        print("title：%s" % article['title'])
+                # url取得
+                if article['url']:
+                    print("url：%s" % article['url'])
+                # 投稿日
+                if article["created_at"]:
+                    print("投稿日：%s" % article['created_at'])
+                # 最新更新日
+                if article["updated_at"]:
+                    print("最新更新日：%s" % article['updated_at'])
+            except AttributeError:
+                pass
+
+
 
 
 if __name__ == '__main__':
     client = child_QiitaClient(access_token=TOKEN)
-    client.get_particular_article('hiropon4000')
+    client.get_particular_article('JunyaKaneko')
