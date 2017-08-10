@@ -15,12 +15,24 @@ class child_QiitaClient(QiitaClient):
         # 特定のユーザーの投稿記事一覧を取得
         res_user = self.list_user_items(id)
         article_list = res_user.to_json()
-        for article in article_list:
-            for tags in article['tags']:
-                if tags['name'] == 'QiitaAPI':
-                    print(article['title'])
-
+        try:  # その中でも特定のタグ『Python』で取得
+            for article in article_list:
+                for tags in article['tags']:
+                    if tags['name'] == 'Python':
+                        # タイトル取得
+                        print("タイトル：%s" % article['title'])
+                # urlを取得
+                if article['url']:
+                    print("url：%s" % article['url'])
+                # 投稿日
+                if article['created_at']:
+                    print("投稿日：%s" % article['created_at'])
+                # 最新更新日
+                if article['updated_at']:
+                    print("最新更新日：%s" % article['updated_at'])
+        except KeyError:
+            pass
 
 if __name__ == '__main__':
     client = child_QiitaClient(access_token=TOKEN)
-    client.get_particular_article('hiropon4000')
+    client.get_particular_article('JunyaKaneko')
