@@ -5,6 +5,11 @@
 import mistune   # MarkdownからHTML変換
 from qiita_v2.client import QiitaClient
 
+import django
+from django.conf import settings
+
+django.setup()
+from qiita.models import Article
 # qiitaの個人用アクセストークン
 TOKEN = "4eb33e0057f314d4e8cdcc973a906325a24438fa"
 
@@ -45,6 +50,18 @@ class child_QiitaClient(QiitaClient):
                     # html_body = mistune.markdown(article['body'])
                     article_body = article['body']
                     # print("本文：%s" % article['body'])  # Markdownを取得
+
+                # article = Article(title=title,
+                #                   url=url,
+                #                   created_at=created_at,
+                #                   updated_at=updated_at,
+                #                   article_body=article_body)
+                # article.save()
+                article_query = Article(title=title,
+                                        url=url,
+                                        article_body=article_body)
+                article_query.save()
+                print(Article.objects.all())
 
                 return title, url, created_at, updated_at, article_body
         except KeyError:
