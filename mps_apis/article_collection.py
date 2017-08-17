@@ -7,7 +7,7 @@ from qiita_v2.client import QiitaClient
 
 import django
 from django.conf import settings
-import credentials  # <<<<<< アクセストークンは外部にはださないこと
+import credentials
 django.setup()
 from qiita.models import Article
 

@@ -18,6 +18,7 @@ from django.contrib import admin
 
 import qiita.urls
 
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^qiita/', include(qiita.urls, namespace='qiita')),
