@@ -42,7 +42,14 @@ class RedirectView(View):
         req = urllib.request.Request(url, data=json_data, method=method, headers=headers)
         with urllib.request.urlopen(req) as response:
             response_body = response.read().decode("utf-8")
+            json_body = json.loads(response_body)
+
+
+        if "token" in json_body:
+            # query_paramが指定されている場合の処理
+            print("json_body", json_body['token'])
+            token = json_body['token']
         # print("param_value", param_value)
         return render(request, 'qiita/redirect.html', {
-            'response_body': response_body
+            'token': token
         })
