@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from qiita import models
+from qiita.models import Article, AccessToken
 # Create your views here.
 from django.views import View
 # コマンドラインをスクリプトから実行
@@ -49,6 +49,8 @@ class RedirectView(View):
             # query_paramが指定されている場合の処理
             print("json_body", json_body['token'])
             token = json_body['token']
+            access_token = AccessToken.objects.create(token=token)
+            access_token.save()
         # print("param_value", param_value)
         return render(request, 'qiita/redirect.html', {
             'token': token
