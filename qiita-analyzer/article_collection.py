@@ -16,19 +16,16 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mps_apis.settings")
 from django.core.management import execute_from_command_line
 import django
 from django.conf import settings  # 今回使わないかも一応import
-
 django.setup()
-from qiita.models import Article
-
-
-
+from qiita.models import AccessToken
 
 import mistune   # MarkdownからHTML変換
 from qiita_v2.client import QiitaClient
-import credentials
 
-# qiitaの個人用アクセストークン
-TOKEN = credentials.TOKEN
+
+
+# qiitaの個人用アクセストークンをdjango-qiita-analyzerモデルから取得
+TOKEN = AccessToken.objects.get(pk=1)
 
 class child_QiitaClient(QiitaClient):
     """
