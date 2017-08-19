@@ -2,11 +2,33 @@
 # 参照：http://qiita.com/Algebra_nobu/items/abe38a5f1fea4aaf1700
 # 参照：http://qiita.com/tag1216/items/7e23630d97293e35ea4c
 
+# django-qiita-analyzerモジュールをimportしてdjangoモデル使う
+# localファイル.bash_profile
+# MPSのdjango-qiita-analyzerパス
+# export DJANGO_QIITA_ANALYZER=/Users/hiroshiteraoka/MPS/mps_website/django-qiita-analyzer/mps_apis
+
+import os, sys
+
+# このファイル実行前に一度上記exportをコマンドラインでパス通す
+django_qiita_analyzer = os.environ['DJANGO_QIITA_ANALYZER']
+sys.path.append(django_qiita_analyzer)  # med_m_tool_web へのパス
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mps_apis.settings")
+from django.core.management import execute_from_command_line
+import django
+from django.conf import settings  # 今回使わないかも一応import
+
+django.setup()
+from qiita.models import Article
+
+
+
+
 import mistune   # MarkdownからHTML変換
 from qiita_v2.client import QiitaClient
+import credentials
 
 # qiitaの個人用アクセストークン
-TOKEN = "4eb33e0057f314d4e8cdcc973a906325a24438fa"
+TOKEN = credentials.TOKEN
 
 class child_QiitaClient(QiitaClient):
     """
