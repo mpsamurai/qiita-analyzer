@@ -17,7 +17,7 @@ from django.core.management import execute_from_command_line
 import django
 from django.conf import settings  # 今回使わないかも一応import
 django.setup()
-from qiita.models import AccessToken
+from qiita.models import Article, AccessToken
 
 import mistune   # MarkdownからHTML変換
 from qiita_v2.client import QiitaClient
@@ -63,6 +63,9 @@ def get_particular_user_article(id):
                 article_body = article['body']
                 # print("本文：%s" % article['body'])  # Markdownを取得
 
+            Article.objects.create(article_title=title,
+                                   url=url,
+                                   article_body=article_body)
             return title, url, created_at, updated_at, article_body
     except KeyError:
         pass
