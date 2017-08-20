@@ -23,7 +23,6 @@ import mistune   # MarkdownからHTML変換
 from qiita_v2.client import QiitaClient
 
 
-
 # qiitaの個人用アクセストークンをdjango-qiita-analyzerモデルから取得
 TOKEN = AccessToken.objects.get(pk=1)
 client = QiitaClient(access_token=TOKEN)
@@ -71,6 +70,5 @@ def get_particular_user_article(id):
             return title, url, created_at, updated_at, article_body
     except KeyError:
         pass
-
 
 print(get_particular_user_article(id))
