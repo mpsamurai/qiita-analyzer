@@ -65,6 +65,8 @@ def get_particular_user_article(id):
 
             Article.objects.create(article_title=title,
                                    url=url,
+                                   created_at=created_at,
+                                   updated_at=updated_at,
                                    article_body=article_body)
             return title, url, created_at, updated_at, article_body
     except KeyError:
