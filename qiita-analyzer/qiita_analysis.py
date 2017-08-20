@@ -5,6 +5,7 @@
 
 import os, sys
 import MeCab
+from gensim import corpora, models, similarities
 
 # このファイル実行前に一度上記exportをコマンドラインでパス通す
 django_qiita_analyzer = os.environ['DJANGO_QIITA_ANALYZER']
@@ -21,14 +22,33 @@ from qiita_v2.client import QiitaClient
 
 
 tagger = MeCab.Tagger("-Owakati")
+title_documents = []
 
 def analysis_user_article():
 
     article = Article.objects.all()
-
     for item in article:
-        mecab_title = tagger.parse(item.article_title).split(' ')
-        print(mecab_title)
+        title_documents.extend(tagger.parse(item.article_title).split(' '))
+        # title_documents.append(item.article_title)
+    # print(title_documents)
+
+
+    stoplist = set('の ため た - / 2 を ( ) から ; : \n , .'.split())  # 除外するリスト
+    # print(stoplist)
+
+    texts = [[word for word in document.split() if word not in stoplist]
+             for document in title_documents]
+    print(texts)
+    all_tokens = sum(texts, [])
+    tokens_once = set(word for word in set(all_tokens) if all_tokens.count(word) == 1)
+    print(tokens_once)
+    # text_list = [[word for word in text if word not in tokens_once]
+    #          for text in texts]
+    #
+    #
+    # print(text_list)
+
+
 
 
 analysis_user_article()
