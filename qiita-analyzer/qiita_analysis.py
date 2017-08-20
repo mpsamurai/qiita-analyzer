@@ -22,11 +22,13 @@ from qiita_v2.client import QiitaClient
 
 tagger = MeCab.Tagger("-Owakati")
 
-
 def analysis_user_article():
 
     article = Article.objects.all()
-    print(article[0].article_title, article[0].article_body)
+
+    for item in article:
+        mecab_title = tagger.parse(item.article_title).split(' ')
+        print(mecab_title)
 
 
-print(analysis_user_article())
+analysis_user_article()

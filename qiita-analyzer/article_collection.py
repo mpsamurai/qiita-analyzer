@@ -43,6 +43,7 @@ def get_particular_user_article(id):
                 if tags['name'] == 'Python':
                     # タイトル取得
                     title = article['title']
+                    print(title)
                     # print("タイトル：%s" % article['title'])
             # urlを取得
             if article['url']:
@@ -67,8 +68,6 @@ def get_particular_user_article(id):
                                    created_at=created_at,
                                    updated_at=updated_at,
                                    article_body=article_body)
-            return title, url, created_at, updated_at, article_body
     except KeyError:
         pass
-
-print(get_particular_user_article(id))
+get_particular_user_article(id)
