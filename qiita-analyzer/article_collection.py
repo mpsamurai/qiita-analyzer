@@ -17,18 +17,21 @@ from django.core.management import execute_from_command_line
 import django
 from django.conf import settings  # 今回使わないかも一応import
 django.setup()
-from qiita.models import Article, AccessToken
+from qiita.models import Article, AllArticle, AccessToken
 
 import mistune   # MarkdownからHTML変換
 from qiita_v2.client import QiitaClient
+
+import qiita_all_articles_collection as qiita2
 
 
 # qiitaの個人用アクセストークンをdjango-qiita-analyzerモデルから取得
 TOKEN = AccessToken.objects.get(pk=1)
 client = QiitaClient(access_token=TOKEN)
 id = "JunyaKaneko"
+tag = "Python"
 
-def get_particular_user_article(id):
+def get_particular_user_tag_article(id, tag):
     """
     特定のユーザーの特定のタグに関する記事を取得
     :param id: User_id
@@ -40,7 +43,7 @@ def get_particular_user_article(id):
     try:  # その中でも特定のタグ『Python』で取得
         for article in article_list:
             for tags in article['tags']:
-                if tags['name'] == 'Python':
+                if tags['name'] == tag:
                     # タイトル取得
                     title = article['title']
                     print(title)
@@ -63,11 +66,30 @@ def get_particular_user_article(id):
                 article_body = article['body']
                 # print("本文：%s" % article['body'])  # Markdownを取得
 
-            Article.objects.create(article_title=title,
-                                   url=url,
-                                   created_at=created_at,
-                                   updated_at=updated_at,
-                                   article_body=article_body)
+                Article.objects.create(article_title=title,
+                                           url=url,
+                                           created_at=created_at,
+                                           updated_at=updated_at,
+                                           article_body=article_body)
     except KeyError:
         pass
-get_particular_user_article(id)
+# get_particular_user_tag_article(id, tag)
+
+
+def get_all_tag_articles(tag):
+    """
+    qiita_all_articles_collectionファイル参照
+    :param tag: "Python"
+    djangoモデルへ保存
+    """
+    qiita2.wait_seconds = 0
+    for item in qiita2.tag_items(tag, 100, 5):  # qiita2.tag_items(tag_url, per_page, max_page)
+        AllArticle.objects.create(article_title=item["title"],
+                                  url=item["url"],
+                                  created_at=item["created_at"],
+                                  updated_at=item["updated_at"],
+                                  article_body=item["rendered_body"])
+        # print(item["title"])
+        # qiita2.save_item(item)
+
+get_all_tag_articles(tag)

@@ -1,3 +1,4 @@
+# 参照：http://qiita.com/tag1216/items/7e23630d97293e35ea4c#%E7%89%B9%E5%AE%9A%E3%82%BF%E3%82%B0%E3%81%AE%E6%8A%95%E7%A8%BF%E4%B8%80%E8%A6%A7%E3%81%AE%E5%8F%96%E5%BE%97
 import time
 
 import codecs
@@ -145,3 +146,5 @@ def save_item(item):
     filename = "/Users/hiroshiteraoka/MPS/mps_website/data/items/%s.json" % item_id
     with codecs.open(filename, "w", "utf-8") as f:
         f.write(json.dumps(item, indent = 4, ensure_ascii=False))
+
+
