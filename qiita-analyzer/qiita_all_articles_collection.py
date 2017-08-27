@@ -10,9 +10,9 @@ from urllib.parse import urlparse, parse_qs
 
 logger = getLogger(__name__)
 
-URL_ITEMS     = "https://qiita.com/api/v2/items"
-URL_TAG_ITEMS = "https://qiita.com/api/v2/tags/%s/items"
-URL_TAGS      = "https://qiita.com/api/v2/tags"
+URL_ITEMS     = "https://django_qiita_analyzer.com/api/v2/items"
+URL_TAG_ITEMS = "https://django_qiita_analyzer.com/api/v2/tags/%s/items"
+URL_TAGS      = "https://django_qiita_analyzer.com/api/v2/tags"
 
 HEADER_TOTAL = "Total-Count"
 LINK_NEXT = "next"

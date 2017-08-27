@@ -69,11 +69,18 @@ class ParticularUserArticle():
                     article_body = article['body']
 
                     # update_or_createで重複保存を無くし、更新されたら保存
-                    Article.objects.update_or_create(article_title=title,
-                                                     url=url,
-                                                     created_at=created_at,
-                                                     updated_at=updated_at,
-                                                     article_body=article_body)
+                    # Article.objects.update_or_create(article_title=title,
+                    #                                  url=url,
+                    #                                  created_at=created_at,
+                    #                                  updated_at=updated_at,
+                    #                                  article_body=article_body)
+
+                    Article.objects.create(article_title=title,
+                                           url=url,
+                                           created_at=created_at,
+                                           updated_at=updated_at,
+                                           article_body=article_body)
+
         except AttributeError:
             print("AccessTokenがないよ")
 

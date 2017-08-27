@@ -1,7 +1,7 @@
 # django-qiita-analyzerモジュールをimportしてdjangoモデル使う
 # localファイル.bash_profile
-# MPSのdjango-qiita-analyzerパス
-# export DJANGO_QIITA_ANALYZER=/Users/hiroshiteraoka/MPS/mps_website/django-qiita-analyzer/mps_apis
+# MPSのdjango-django_qiita_analyzer-analyzerパス
+# export DJANGO_QIITA_ANALYZER=/Users/hiroshiteraoka/MPS/mps_website/django-django_qiita_analyzer-analyzer/mps_apis
 
 import os, sys
 import MeCab
