@@ -1,7 +1,7 @@
 # django-qiita-analyzerモジュールをimportしてdjangoモデル使う
 # localファイル.bash_profile
 # MPSのdjango-django_qiita_analyzer-analyzerパス
-# export DJANGO_QIITA_ANALYZER=/Users/hiroshiteraoka/MPS/mps_website/django-django_qiita_analyzer-analyzer/mps_apis
+# export DJANGO_QIITA_ANALYZER=/vagrant/django-qiita-analyzer/mps_apis
 
 import os, sys
 
@@ -12,7 +12,9 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mps_apis.settings")
 from django.core.management import execute_from_command_line
 import django
 from django.conf import settings
+
 django.setup()
+
 # from django_qiita_analyzer.models import Article, AllArticle, AccessToken
 from django_qiita_analyzer.models import Article, AccessToken
 import django_qiita_analyzer.credentials as credentials
