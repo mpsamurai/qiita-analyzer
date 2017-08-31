@@ -1,54 +1,86 @@
-# django-qiita-analyzerモジュールをimportしてdjangoモデル使う
-# localファイル.bash_profile
-# MPSのdjango-django_qiita_analyzer-analyzerパス
-# export DJANGO_QIITA_ANALYZER=/Users/hiroshiteraoka/MPS/mps_website/django-django_qiita_analyzer-analyzer/mps_apis
-
 import os, sys
-import MeCab
-from gensim import corpora, models, similarities
 
 # このファイル実行前に一度上記exportをコマンドラインでパス通す
 django_qiita_analyzer = os.environ['DJANGO_QIITA_ANALYZER']
-sys.path.append(django_qiita_analyzer)  # med_m_tool_web へのパス
+sys.path.append(django_qiita_analyzer)  # django-qiita-analyzerへパス通す
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mps_apis.settings")
 from django.core.management import execute_from_command_line
 import django
-from django.conf import settings  # 今回使わないかも一応import
+from django.conf import settings
 django.setup()
-from qiita.models import Article, AccessToken
+from django_qiita_analyzer.models import MachineLearningArticle, \
+    NLPArticle, ImageRecognitionArticle, DepthLearningArticle
 
-import mistune   # MarkdownからHTML変換
-from qiita_v2.client import QiitaClient
+from janome.tokenizer import Tokenizer
+t = Tokenizer()
+# 単語の出現頻度をカウントする
+# 単語の辞書を作成
+worddic = {}
+items = ImageRecognitionArticle.objects.all()
+for item in items:
+    malist = t.tokenize(item.article_title)  # 一行一行形態素解析
+    for w in malist:
+        word = w.surface
+        part = w.part_of_speech
+        if part.find('名詞') < 0:
+            continue
+        if not word in worddic:
+            worddic[word] = 0
+        worddic[word] += 1
 
-
-tagger = MeCab.Tagger("-Owakati")
-title_documents = []
-
-def analysis_test_article():
-
-    article = Article.objects.all()
-    for item in article:
-        title_documents.extend(tagger.parse(item.article_title).split(' '))
-        # title_documents.append(item.article_title)
-    # print(title_documents)
-
-
-    stoplist = set('の ため た - / 2 を ( ) から ; : \n , .'.split())  # 除外するリスト
-    # print(stoplist)
-
-    texts = [[word for word in document.split() if word not in stoplist]
-             for document in title_documents]
-    print(texts)
-    all_tokens = sum(texts, [])
-    tokens_once = set(word for word in set(all_tokens) if all_tokens.count(word) == 1)
-    print(tokens_once)
-    text_list = [[word for word in text if word not in tokens_once]
-             for text in texts]
-
-
-    print(text_list)
-
-
-
-
-# analysis_test_article()
+keys = sorted(worddic.items(), key=lambda x: x[1], reverse=True)
+for word, cnt in keys[:50]:
+    print("{0}({1})\n".format(word, cnt), end="")
+    # タイトルでよく出てくる単語を分解すると以下の様な状況
+"""
+画像(43)
+認識(29)
+-(24)
+OpenCV(20)
+)(14)
+((14)
+Python(12)
+.(10)
+顔(9)
+Visual(9)
+Recognition(9)
+API(9)
+検出(8)
+論文(8)
+調査(7)
+:(6)
+カメラ(6)
+](6)
+ため(6)
+学習(6)
+推定(6)
+2(6)
+～(6)
+Vision(6)
+[(6)
+アプリ(6)
+化(6)
+1(6)
+GPU(5)
+初心者(5)
+Watson(5)
+Tutorials(5)
+処理(5)
+Microsoft(5)
+コード(5)
+3(5)
+CNN(4)
+image(4)
+動画(4)
+実装(4)
+ディープラーニング(4)
+データ(4)
+Networks(4)
+Scikit(4)
+内容(4)
+上(4)
+中(4)
+文字(4)
+言語(4)
+物体(4)
+"""
