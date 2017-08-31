@@ -15,13 +15,11 @@ from django.conf import settings
 
 django.setup()
 
-# from django_qiita_analyzer.models import Article, AllArticle, AccessToken
-from django_qiita_analyzer.models import Article, AccessToken
+from django_qiita_analyzer.models import OauthArticle, AccessToken
 import django_qiita_analyzer.credentials as credentials
 
 import mistune   # MarkdownからHTML変換
 from qiita_v2.client import QiitaClient
-import qiita_all_articles_collection as qiita2
 
 
 class ParticularUserArticle():
@@ -31,7 +29,6 @@ class ParticularUserArticle():
     def __init__(self):
         # django_qiita_analyzerモデルから最新のTOKENを取得
         TOKEN = AccessToken.latest_token.get_latest_token()
-        print("TOKEN", TOKEN)
         if TOKEN == None:
             print("AccessTokenがない")
         else:
@@ -71,11 +68,11 @@ class ParticularUserArticle():
                     article_body = article['body']
 
                     # update_or_createで重複保存を無くし、更新されたら保存
-                    Article.objects.update_or_create(article_title=title,
-                                                     url=url,
-                                                     created_at=created_at,
-                                                     updated_at=updated_at,
-                                                     article_body=article_body)
+                    OauthArticle.objects.update_or_create(article_title=title,
+                                                          url=url,
+                                                          created_at=created_at,
+                                                          updated_at=updated_at,
+                                                          article_body=article_body)
 
 
         except AttributeError:
@@ -86,20 +83,3 @@ if __name__ == '__main__':
     particular_user.get_particular_user_tag_article()
 
 
-# def get_all_tag_articles(tag):
-#     """
-#     qiita_all_articles_collectionファイル参照
-#     :param tag: "Python"
-#     djangoモデルへ保存
-#     """
-#     qiita2.wait_seconds = 0
-#     for item in qiita2.tag_items(tag, 100, 5):  # qiita2.tag_items(tag_url, per_page, max_page)
-#         AllArticle.objects.create(article_title=item["title"],
-#                                   url=item["url"],
-#                                   created_at=item["created_at"],
-#                                   updated_at=item["updated_at"],
-#                                   article_body=item["rendered_body"])
-#         # print(item["title"])
-#         # qiita2.save_item(item)
-#
-# get_all_tag_articles(tag)
