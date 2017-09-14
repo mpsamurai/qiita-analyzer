@@ -1,7 +1,7 @@
 # django-qiita-analyzerモジュールをimportしてdjangoモデル使う
 # localファイル.bash_profile
-# MPSのdjango-qiita-analyzerパス
-# export DJANGO_QIITA_ANALYZER=/Users/hiroshiteraoka/MPS/mps_website/django-qiita-analyzer/mps_apis
+# MPSのdjango-django_qiita_analyzer-analyzerパス
+# export DJANGO_QIITA_ANALYZER=/Users/hiroshiteraoka/MPS/mps_website/django-django_qiita_analyzer-analyzer/mps_apis
 
 import os, sys
 import MeCab
@@ -24,7 +24,7 @@ from qiita_v2.client import QiitaClient
 tagger = MeCab.Tagger("-Owakati")
 title_documents = []
 
-def analysis_user_article():
+def analysis_test_article():
 
     article = Article.objects.all()
     for item in article:
@@ -42,13 +42,13 @@ def analysis_user_article():
     all_tokens = sum(texts, [])
     tokens_once = set(word for word in set(all_tokens) if all_tokens.count(word) == 1)
     print(tokens_once)
-    # text_list = [[word for word in text if word not in tokens_once]
-    #          for text in texts]
-    #
-    #
-    # print(text_list)
+    text_list = [[word for word in text if word not in tokens_once]
+             for text in texts]
+
+
+    print(text_list)
 
 
 
 
-analysis_user_article()
+# analysis_test_article()
